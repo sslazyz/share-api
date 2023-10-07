@@ -2,6 +2,8 @@ package top.dong.share.user.controller;
 
 
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
 import top.dong.share.user.domain.dto.LoginDTO;
@@ -23,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public CommonResp<User> login(@RequestBody LoginDTO loginDTO) {
+    public CommonResp<User> login(@Valid @RequestBody LoginDTO loginDTO) {
         User user = userService.login(loginDTO);
         CommonResp<User> commonResp = new CommonResp<>();
         commonResp.setData(user);
