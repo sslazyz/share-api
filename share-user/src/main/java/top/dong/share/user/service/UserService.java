@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import top.dong.share.common.exception.BusinessException;
 import top.dong.share.common.exception.BusinessExceptionEnum;
+import top.dong.share.common.util.SnowUtil;
 import top.dong.share.user.domain.dto.LoginDTO;
 import top.dong.share.user.domain.entity.User;
 import top.dong.share.user.mapper.UserMapper;
+
+import java.util.Date;
 
 @Service
 public class UserService {
@@ -35,4 +38,30 @@ public class UserService {
         //都正确,返回
         return userDB;
     }
+
+    public Long register(LoginDTO loginDTO) {
+        //根据手机号查找用户
+        User userDB = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getPhone, loginDTO.getPhone()));
+        //找到了
+        if (userDB != null) {
+            throw new BusinessException(BusinessExceptionEnum.PHONE_EXIST);
+        }
+        User saveUser = User.builder()
+                //使用雪花算法生成id
+                .id(SnowUtil.getSnowflakeNextId())
+                .phone(loginDTO.getPhone())
+                .password(loginDTO.getPassword())
+                .nickname("新用户")
+                .roles("user")
+                .avatarUrl("https://i2.10024.xyz/2023/01/26/3exzjl.webp")
+                .bonus(100)
+                .createTime(new Date())
+                .updateTime(new Date())
+                .build();
+        userMapper.insert(saveUser);
+        return saveUser.getId();
+
+    }
+
+
 }
