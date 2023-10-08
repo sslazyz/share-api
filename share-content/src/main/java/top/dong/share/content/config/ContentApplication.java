@@ -1,4 +1,4 @@
-package top.dong.share.user.config;
+package top.dong.share.content.config;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +12,9 @@ import org.springframework.core.env.Environment;
 @ComponentScan("top.dong")
 @Slf4j
 @MapperScan("top.dong.share.*.mapper")
-public class UserApplication {
+public class ContentApplication {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(UserApplication.class);
+        SpringApplication app = new SpringApplication(ContentApplication.class);
         Environment env = app.run(args).getEnvironment();
         log.info("启动成功！！！");
         log.info("测试地址 :http://127.0.0.1:{}{}/hello",
@@ -22,15 +22,3 @@ public class UserApplication {
                 env.getProperty("server.servlet.context-path"));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

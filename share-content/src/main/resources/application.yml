@@ -1,0 +1,25 @@
+server:
+  port: 8002
+  servlet:
+    context-path: /content-service
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            #允许请求来源
+            allowedOriginPatterns: '*'
+            #允许携带头部信息
+            allowedHeaders: '*'
+            allowedMethods: '*'
+            allowCredentials: 'true'
+            maxAge: '3600'
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_center?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+logging:
+  level:
+    top.dong.share.user.mapper: debug

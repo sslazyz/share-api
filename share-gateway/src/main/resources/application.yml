@@ -8,13 +8,15 @@ spring:
           uri: http://127.0.0.1:8001
           predicates:
             - Path=/user-service/**
+        - id: route-content
+          uri: http://127.0.0.1:8002
+          predicates:
+            - Path=/content-service/**
       globalcors:
         cors-configurations:
           '[/**]':
-              #允许请求来源
-            allowedOriginPatterns: '*'
-            #允许携带头部信息
-            allowedHeaders: '*'
-            allowedMethods: '*'
-            allowCredentials: 'true'
-            maxAge: '3600'
+            allowedOriginPatterns: "*" # 允许请求来源
+            allowCredentials: "true" # 允许携带认证信息
+            allowedMethods: "*"   # 允许跨域的method， 默认为GET和OPTIONS，设置*为全部
+            allowedHeaders: "*"   # 允许跨域请求里的head字段，设置*为全部
+            maxAge: "3600" #跨域检测有效期 会发起一个OPTION请求
