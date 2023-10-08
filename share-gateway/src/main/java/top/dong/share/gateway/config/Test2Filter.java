@@ -13,19 +13,19 @@ import reactor.core.publisher.Mono;
  * @date 2023/10/7
  * @description Test2Filter
  **/
-@Component
-@Slf4j
-public class Test2Filter implements GlobalFilter, Ordered {
-
-
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("Test2Filter");
-        return chain.filter(exchange);
-    }
-
-    @Override
-    public int getOrder() {
-        return 1;
-    }
-}
+//@Component
+//@Slf4j
+//public class Test2Filter implements GlobalFilter, Ordered {
+//
+//
+//    @Override
+//    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+//        log.info("Test2Filter");
+//        return chain.filter(exchange);
+//    }
+//
+//    @Override
+//    public int getOrder() {
+//        return 1;
+//    }
+//}
