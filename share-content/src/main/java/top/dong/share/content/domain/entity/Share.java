@@ -26,6 +26,7 @@ public class Share {
     private Boolean showFlag;
     private String auditStatus;
     private String reason;
+    private Integer price;
 
     @JsonFormat(locale = "zh",timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
