@@ -3,6 +3,7 @@ package top.dong.share.content.controller;
 
 import cn.hutool.json.JSONObject;
 import jakarta.annotation.Resource;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
@@ -94,5 +95,22 @@ public class ShareController {
         shareRequestDTO.setUserId(userId);
         System.out.println(shareRequestDTO);
         return shareService.contribute(shareRequestDTO);
+    }
+
+    /**
+     * 新增查询我的投稿接口
+     */
+    @GetMapping("/my-contribute")
+    public CommonResp<List<Share>> myContribute(
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "8") Integer pageSize,
+            @RequestHeader(value = "token", required = false) String token) {
+        if (pageSize > MAX) {
+            pageSize = MAX;
+        }
+        long userId = getUserIdFromToken(token);
+        CommonResp<List<Share>> commonResp = new CommonResp<>();
+        commonResp.setData(shareService.myContribute(pageNo, pageSize, userId));
+        return commonResp;
     }
 }
