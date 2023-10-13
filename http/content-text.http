@@ -54,6 +54,11 @@ GET http://localhost:8000/content-service/share/my-contribute?pageNo=1&pageSize=
 Accept: application/json
 token: {{token}}
 
+###
+GET http://localhost:8000/content-service/admin/share/list
+Accept: application/json
+token: {{token}}
+
 
 
 
