@@ -1,9 +1,20 @@
 server:
   port: 8002
-  servlet:
-    context-path: /content-service
+#  servlet:
+#    context-path: /content-service
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  application:
+    name: content-service
   cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847
+        heart-beat-interval: 5000
+        heart-beat-timeout: 15000
+        namespace: dev
     gateway:
       globalcors:
         cors-configurations:

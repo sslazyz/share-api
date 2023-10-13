@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
 import top.dong.share.common.util.JwtUtil;
+import top.dong.share.content.domain.dto.ExchangeDTO;
 import top.dong.share.content.domain.entity.Notice;
 import top.dong.share.content.domain.entity.Share;
+import top.dong.share.content.domain.resp.ShareResp;
 import top.dong.share.content.service.NoticeService;
 import top.dong.share.content.service.ShareService;
 
@@ -65,5 +67,21 @@ public class ShareController {
             log.info("没有 token");
         }
         return userId;
+    }
+
+    @GetMapping("/{id}")
+    public CommonResp<ShareResp> getShareById(@PathVariable Long id) {
+        ShareResp shareResp = shareService.findById(id);
+        CommonResp<ShareResp> commonResp = new CommonResp<>();
+        commonResp.setData(shareResp);
+        return commonResp;
+    }
+
+    @PostMapping("/exchange")
+    public CommonResp<Share> exchange(@RequestBody ExchangeDTO exchangeDTO) {
+        System.out.println(exchangeDTO);
+        CommonResp<Share> commonResp = new CommonResp<>();
+        commonResp.setData(shareService.exchange(exchangeDTO));
+        return commonResp;
     }
 }

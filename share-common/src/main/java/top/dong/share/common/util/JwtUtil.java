@@ -61,7 +61,7 @@ public class JwtUtil {
     }
 
     public static void main(String[] args) {
-        String token = createToken(1L, "13951905171");
+        String token = createToken(2L, "13951905171");
         System.out.println(token);
         try {
             Thread.sleep(12000);

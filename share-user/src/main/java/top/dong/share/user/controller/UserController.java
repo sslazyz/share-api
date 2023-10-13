@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
 import top.dong.share.user.domain.dto.LoginDTO;
+import top.dong.share.user.domain.dto.UserAddBonusMsgDTO;
 import top.dong.share.user.domain.entity.User;
 import top.dong.share.user.domain.resp.UserLoginResp;
 import top.dong.share.user.service.UserService;
@@ -40,4 +41,31 @@ public class UserController {
         commonResp.setData(id);
         return commonResp;
     }
+
+    @GetMapping("/{id}")
+    public CommonResp<User> getUserById(@PathVariable Long id){
+        User user = userService.findById(id);
+        CommonResp<User> commonResp = new CommonResp<>();
+        commonResp.setData(user);
+        return commonResp;
+    }
+
+    @PutMapping(value = "/update-bonus")
+    public CommonResp<User> updateBonus(@RequestBody UserAddBonusMsgDTO userAddBonusMsgDTO) {
+        Long userId = userAddBonusMsgDTO.getUserId();
+        userService.updateBonus(
+                UserAddBonusMsgDTO.builder()
+                        .userId(userId)
+                        .bonus(userAddBonusMsgDTO.getBonus())
+                        .description("兑换分享")
+                        .event("BUY")
+                        .build()
+        );
+        CommonResp<User> commonResp = new CommonResp<>();
+        commonResp.setData(userService.findById(userId));
+        return commonResp;
+    }
+
+
+
 }

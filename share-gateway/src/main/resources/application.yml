@@ -1,15 +1,33 @@
 server:
   port: 8000
+
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  application:
+    name: gateway-service
   cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847
+        heart-beat-interval: 5000
+        heart-beat-timeout: 15000
+        namespace: dev
     gateway:
+      discovery:
+        locator:
+          #允许网关通过服务发现组件，找到其他的微服务
+          enabled: true
       routes:
         - id: route-user
-          uri: http://127.0.0.1:8001
+#          uri: http://127.0.0.1:8001
+          uri: lb://user-service
           predicates:
             - Path=/user-service/**
         - id: route-content
-          uri: http://127.0.0.1:8002
+#          uri: http://127.0.0.1:8002
+          uri: lb://content-service
           predicates:
             - Path=/content-service/**
       globalcors:

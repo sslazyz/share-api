@@ -1,8 +1,20 @@
 server:
   port: 8001
-  servlet:
-    context-path: /user-service
+#  servlet:
+#    context-path: /user-service
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8847
+        heart-beat-interval: 5000
+        heart-beat-timeout: 15000
+        namespace: dev
   datasource:
     url: jdbc:mysql://localhost:3306/user_center?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
     username: root

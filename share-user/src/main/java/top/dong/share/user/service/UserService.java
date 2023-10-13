@@ -4,16 +4,21 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import top.dong.share.common.exception.BusinessException;
 import top.dong.share.common.exception.BusinessExceptionEnum;
 import top.dong.share.common.util.JwtUtil;
 import top.dong.share.common.util.SnowUtil;
 import top.dong.share.user.domain.dto.LoginDTO;
+import top.dong.share.user.domain.dto.UserAddBonusMsgDTO;
+import top.dong.share.user.domain.entity.BonusEventLog;
 import top.dong.share.user.domain.entity.User;
 import top.dong.share.user.domain.resp.UserLoginResp;
+import top.dong.share.user.mapper.BonusEventLogMapper;
 import top.dong.share.user.mapper.UserMapper;
 
 import java.util.Date;
@@ -21,9 +26,36 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class UserService {
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private BonusEventLogMapper bonusEventLogMapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBonus(UserAddBonusMsgDTO userAddBonusMsgDTO) {
+        System.out.println(userAddBonusMsgDTO);
+        //1。为用户修改积分
+        Long userId = userAddBonusMsgDTO.getUserId();
+        Integer bonus = userAddBonusMsgDTO.getBonus();
+        User user = userMapper.selectById(userId);
+        user.setBonus(user.getBonus() + bonus);
+        userMapper.update(user, new QueryWrapper<User>().lambda().eq(User::getId, userId));
+
+        //2.记录日志到 bonus_event_log表里
+        bonusEventLogMapper.insert(
+                BonusEventLog.builder()
+                        .userId(userId)
+                        .value(bonus)
+                        .description(userAddBonusMsgDTO.getDescription())
+                        .event(userAddBonusMsgDTO.getEvent())
+                        .createTime(new Date())
+                        .build()
+        );
+        log.info("积分添加完毕...");
+    }
 
     public Long count(){
         return userMapper.selectCount(null);
@@ -76,6 +108,10 @@ public class UserService {
         userMapper.insert(saveUser);
         return saveUser.getId();
 
+    }
+
+    public  User findById(Long userId){
+        return userMapper.selectById(userId);
     }
 
 
