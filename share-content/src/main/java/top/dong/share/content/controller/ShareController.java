@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
 import top.dong.share.common.util.JwtUtil;
 import top.dong.share.content.domain.dto.ExchangeDTO;
+import top.dong.share.content.domain.dto.ShareRequestDTO;
 import top.dong.share.content.domain.entity.Notice;
 import top.dong.share.content.domain.entity.Share;
 import top.dong.share.content.domain.resp.ShareResp;
@@ -30,33 +31,34 @@ public class ShareController {
     private final int MAX = 100;
 
     @GetMapping(value = "/notice")
-    public CommonResp<Notice> getLatestNotice(){
+    public CommonResp<Notice> getLatestNotice() {
         CommonResp<Notice> commonResp = new CommonResp<>();
         commonResp.setData(noticeService.getLatest());
         return commonResp;
     }
 
     @GetMapping(value = "/list")
-    public CommonResp<List<Share>> getShareList(@RequestParam(required = false)String title,
-                                                @RequestParam(required = false,defaultValue = "1")Integer pageNo,
-                                                @RequestParam(required = false,defaultValue = "3")Integer pageSize,
-                                                @RequestHeader(value = "token",required = false)String token){
+    public CommonResp<List<Share>> getShareList(@RequestParam(required = false) String title,
+                                                @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                @RequestParam(required = false, defaultValue = "3") Integer pageSize,
+                                                @RequestHeader(value = "token", required = false) String token) {
         if (pageSize > MAX) {
             pageSize = MAX;
         }
         long userId = getUserIdFromToken(token);
         CommonResp<List<Share>> commonResp = new CommonResp<>();
-        commonResp.setData(shareService.getList(title, pageNo,pageSize,userId));
+        commonResp.setData(shareService.getList(title, pageNo, pageSize, userId));
         return commonResp;
     }
 
     /**
      * 封装一个私有方法，从 token 中提取 userId
+     *
      * @param token
      * @return
      */
     private long getUserIdFromToken(String token) {
-        log.info(">>>>>>>>> token"+token);
+        log.info(">>>>>>>>> token" + token);
         long userId = 0;
         String noToken = "no-token";
         if (!noToken.equals("token")) {
@@ -83,5 +85,14 @@ public class ShareController {
         CommonResp<Share> commonResp = new CommonResp<>();
         commonResp.setData(shareService.exchange(exchangeDTO));
         return commonResp;
+    }
+
+    @PostMapping("/contribute")
+    public int contributeShare(@RequestBody ShareRequestDTO shareRequestDTO,
+                               @RequestHeader(value = "token", required = false) String token) {
+        long userId = getUserIdFromToken(token);
+        shareRequestDTO.setUserId(userId);
+        System.out.println(shareRequestDTO);
+        return shareService.contribute(shareRequestDTO);
     }
 }
