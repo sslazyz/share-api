@@ -113,4 +113,16 @@ public class ShareController {
         commonResp.setData(shareService.myContribute(pageNo, pageSize, userId));
         return commonResp;
     }
+
+
+    @GetMapping("/myExchange")
+    public CommonResp<List<Share>> myExchange(@RequestHeader(value = "token", required = false) String token) {
+        long id = getUserIdFromToken(token);
+        List<Share> shares = shareService.myExchange(id);
+        CommonResp<List<Share>> resp = new CommonResp<>();
+        resp.setData(shares);
+        return resp;
+    }
+
+
 }

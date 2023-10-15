@@ -19,6 +19,7 @@ import top.dong.share.content.feign.UserService;
 import top.dong.share.content.mapper.MidUserShareMapper;
 import top.dong.share.content.mapper.ShareMapper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -152,6 +153,29 @@ public class ShareService {
                 .eq(Share::getAuditStatus, "NOT_YET");
         return shareMapper.selectList(wrapper);
     }
+
+    /**
+     * 我的兑换
+     * @param userId
+     * @return
+     */
+    public List<Share> myExchange(Long userId) {
+        LambdaQueryWrapper<MidUserShare> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(MidUserShare::getUserId, userId);
+        List<MidUserShare> shareList = midUserShareMapper.selectList(wrapper);
+        List<Long> list = shareList.stream().map(item -> item.getShareId()).collect(Collectors.toList());
+        LambdaQueryWrapper<Share> queryWrapper = new LambdaQueryWrapper<>();
+        List<Share> shares = new ArrayList<Share>();
+        for (Long shareId : list) {
+             Share share = shareMapper.selectById(shareId);
+             shares.add(share);
+        }
+        return shares;
+    }
+
+
+
+
 }
 
 

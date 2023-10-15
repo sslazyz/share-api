@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import top.dong.share.common.resp.CommonResp;
 import top.dong.share.user.domain.dto.LoginDTO;
 import top.dong.share.user.domain.dto.UserAddBonusMsgDTO;
+import top.dong.share.user.domain.entity.BonusEventLog;
 import top.dong.share.user.domain.entity.User;
 import top.dong.share.user.domain.resp.UserLoginResp;
 import top.dong.share.user.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -65,6 +68,17 @@ public class UserController {
         commonResp.setData(userService.findById(userId));
         return commonResp;
     }
+
+    @GetMapping(value = "/getBonus")
+    public CommonResp<List<BonusEventLog>> getBonusEventLogs(@RequestParam Long id) {
+        List<BonusEventLog> list = userService.getBonusEventLog(+id);
+        CommonResp<List<BonusEventLog>> resp = new CommonResp<>();
+        resp.setData(list);
+        return resp;
+    }
+
+
+
 
 
 

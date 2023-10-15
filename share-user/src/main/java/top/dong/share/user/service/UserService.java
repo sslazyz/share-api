@@ -2,15 +2,20 @@ package top.dong.share.user.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import top.dong.share.common.exception.BusinessException;
 import top.dong.share.common.exception.BusinessExceptionEnum;
+import top.dong.share.common.resp.CommonResp;
 import top.dong.share.common.util.JwtUtil;
 import top.dong.share.common.util.SnowUtil;
 import top.dong.share.user.domain.dto.LoginDTO;
@@ -22,6 +27,7 @@ import top.dong.share.user.mapper.BonusEventLogMapper;
 import top.dong.share.user.mapper.UserMapper;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -113,6 +119,16 @@ public class UserService {
     public  User findById(Long userId){
         return userMapper.selectById(userId);
     }
+
+
+     public List<BonusEventLog> getBonusEventLog(Long userId) {
+        LambdaQueryWrapper<BonusEventLog> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(BonusEventLog::getUserId, userId);
+        List<BonusEventLog> bonusEventLogList = bonusEventLogMapper.selectList(wrapper);
+        return bonusEventLogList;
+ }
+
+
 
 
 }

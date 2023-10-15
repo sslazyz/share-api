@@ -11,7 +11,7 @@ import top.dong.share.content.service.ShareService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/share")
+@RequestMapping("/share/admin")
 public class ShareAdminController {
 
     @Resource
